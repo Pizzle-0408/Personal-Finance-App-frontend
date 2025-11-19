@@ -1,18 +1,50 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Transaction } from '../services/api';
-import { Home, Car, Utensils, Zap, Shield, Heart, Music, Scissors, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { 
+  Home, Car, Utensils, Zap, Shield, Heart, Music, Scissors, MoreHorizontal, ChevronLeft, ChevronRight,
+  ShoppingCart, ShoppingBag, Coffee, Smartphone, Laptop, Shirt, Gift, Plane, Hotel, 
+  Briefcase, DollarSign, CreditCard, Building, Stethoscope, GraduationCap, Dumbbell, Fuel
+} from 'lucide-react';
 import { useState } from 'react';
 
 const categoryConfig = {
   Housing: { color: 'bg-blue-100 text-blue-600', icon: Home },
+  Home: { color: 'bg-blue-100 text-blue-600', icon: Home },
   Transportation: { color: 'bg-orange-100 text-orange-600', icon: Car },
   Food: { color: 'bg-green-100 text-green-600', icon: Utensils },
+  'Food & Dining': { color: 'bg-green-100 text-green-600', icon: Utensils },
+  'Food & Drink': { color: 'bg-red-100 text-red-600', icon: Utensils },
+  Groceries: { color: 'bg-emerald-100 text-emerald-600', icon: ShoppingCart },
+  'Restaurants': { color: 'bg-lime-100 text-lime-600', icon: Coffee },
   Utilities: { color: 'bg-yellow-100 text-yellow-600', icon: Zap },
   Insurance: { color: 'bg-purple-100 text-purple-600', icon: Shield },
   'Medical & Healthcare': { color: 'bg-red-100 text-red-600', icon: Heart },
+  Healthcare: { color: 'bg-red-100 text-red-600', icon: Stethoscope },
   Personal: { color: 'bg-pink-100 text-pink-600', icon: Scissors },
+  'Personal Care': { color: 'bg-pink-100 text-pink-600', icon: Scissors },
   'Recreation and Entertainment': { color: 'bg-indigo-100 text-indigo-600', icon: Music },
+  Entertainment: { color: 'bg-indigo-100 text-indigo-600', icon: Music },
+  Shopping: { color: 'bg-violet-100 text-violet-600', icon: ShoppingBag },
+  'General Merchandise': { color: 'bg-violet-100 text-violet-600', icon: ShoppingBag },
+  Clothing: { color: 'bg-fuchsia-100 text-fuchsia-600', icon: Shirt },
+  Electronics: { color: 'bg-slate-100 text-slate-600', icon: Laptop },
+  Technology: { color: 'bg-slate-100 text-slate-600', icon: Smartphone },
+  Gas: { color: 'bg-amber-100 text-amber-600', icon: Fuel },
+  'Gas & Fuel': { color: 'bg-amber-100 text-amber-600', icon: Fuel },
+  Travel: { color: 'bg-sky-100 text-sky-600', icon: Plane },
+  Vacation: { color: 'bg-cyan-100 text-cyan-600', icon: Hotel },
+  Gifts: { color: 'bg-rose-100 text-rose-600', icon: Gift },
+  'Gifts & Donations': { color: 'bg-rose-100 text-rose-600', icon: Gift },
+  Business: { color: 'bg-neutral-100 text-neutral-600', icon: Briefcase },
+  Income: { color: 'bg-green-200 text-green-700', icon: DollarSign },
+  Payment: { color: 'bg-green-100 text-green-600', icon: DollarSign },
+  'Credit Card Payment': { color: 'bg-green-100 text-green-600', icon: DollarSign },
+  Bills: { color: 'bg-yellow-200 text-yellow-700', icon: Building },
+  'Bills & Utilities': { color: 'bg-yellow-200 text-yellow-700', icon: Building },
+  Education: { color: 'bg-teal-100 text-teal-600', icon: GraduationCap },
+  Fitness: { color: 'bg-orange-200 text-orange-700', icon: Dumbbell },
+  'Health & Fitness': { color: 'bg-orange-200 text-orange-700', icon: Dumbbell },
   Miscellaneous: { color: 'bg-gray-100 text-gray-600', icon: MoreHorizontal },
 };
 
@@ -74,15 +106,24 @@ export default function TransactionList({ transactions = [], isLoading = false }
           <>
             <div className="space-y-3">
               {currentTransactions.map((transaction) => {
+              const displayName = transaction.name ?? transaction.description ?? transaction.merchant ?? 'Transaction';
               const categoryLabel = transaction.category ?? 'Miscellaneous';
-              const categoryKey =
-                categoryLabel in categoryConfig
-                  ? (categoryLabel as keyof typeof categoryConfig)
-                  : 'Miscellaneous';
+              const displayAmount = Number(transaction.amount ?? 0);
+              
+              // If it's a positive amount, it's a payment - show green dollar sign
+              const isPayment = displayAmount > 0;
+              
+              let categoryKey: keyof typeof categoryConfig;
+              if (isPayment) {
+                categoryKey = 'Payment';
+              } else if (categoryLabel in categoryConfig) {
+                categoryKey = categoryLabel as keyof typeof categoryConfig;
+              } else {
+                categoryKey = 'Miscellaneous';
+              }
+              
               const config = categoryConfig[categoryKey];
               const Icon = config.icon;
-              const displayAmount = Number(transaction.amount ?? 0);
-              const displayName = transaction.name ?? transaction.description ?? transaction.merchant ?? 'Transaction';
 
               return (
                 <div
