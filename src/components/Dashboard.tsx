@@ -57,6 +57,11 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useCallback((node: HTMLInputElement | null) => {
+    if (node) {
+      node.onclick = null;
+    }
+  }, []);
 
   const hydrateDashboard = useCallback(async () => {
     setIsLoading(true);
@@ -347,23 +352,25 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
                 <div className="flex items-center gap-4">
                   <input
                     type="file"
-                    id="csv-upload"
+                    ref={fileInputRef}
                     accept=".csv"
                     onChange={handleFileUpload}
                     disabled={isUploading}
                     className="hidden"
                   />
-                  <Label htmlFor="csv-upload" className="cursor-pointer">
-                    <Button
-                      type="button"
-                      variant="default"
-                      className="bg-red-600 hover:bg-red-700"
-                      disabled={isUploading}
-                    >
-                      <Upload className={`w-4 h-4 mr-2 ${isUploading ? 'animate-spin' : ''}`} />
-                      {isUploading ? 'Uploading…' : 'Upload CSV File'}
-                    </Button>
-                  </Label>
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="bg-red-600 hover:bg-red-700"
+                    disabled={isUploading}
+                    onClick={() => {
+                      const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+                      input?.click();
+                    }}
+                  >
+                    <Upload className={`w-4 h-4 mr-2 ${isUploading ? 'animate-spin' : ''}`} />
+                    {isUploading ? 'Uploading…' : 'Upload CSV File'}
+                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground text-center max-w-md">
                   Supported format: CSV files exported from most major banks. 
