@@ -4,7 +4,11 @@ import Dashboard from './components/Dashboard';
 import { Toaster } from './components/ui/sonner';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    // Initialize from localStorage
+    const saved = localStorage.getItem('isLoggedIn');
+    return saved === 'true';
+  });
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -15,6 +19,11 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  // Persist login state to localStorage
+  useEffect(() => {
+    localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+  }, [isLoggedIn]);
 
   return (
     <div className="min-h-screen bg-background">
