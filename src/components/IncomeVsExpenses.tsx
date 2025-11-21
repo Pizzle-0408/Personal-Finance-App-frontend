@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import { IncomeVsExpensesPoint } from '../services/api';
 
 interface IncomeVsExpensesProps {
@@ -8,13 +8,13 @@ interface IncomeVsExpensesProps {
 }
 
 const placeholderData: IncomeVsExpensesPoint[] = [
-  { month: 'Jan', income: 0, expenses: 0 },
-  { month: 'Feb', income: 0, expenses: 0 },
-  { month: 'Mar', income: 0, expenses: 0 },
-  { month: 'Apr', income: 0, expenses: 0 },
-  { month: 'May', income: 0, expenses: 0 },
-  { month: 'Jun', income: 0, expenses: 0 },
-  { month: 'Jul', income: 0, expenses: 0 },
+  { month: 'Jan', income: 1, expenses: 1 },
+  { month: 'Feb', income: 1, expenses: 1 },
+  { month: 'Mar', income: 1, expenses: 1 },
+  { month: 'Apr', income: 1, expenses: 1 },
+  { month: 'May', income: 1, expenses: 1 },
+  { month: 'Jun', income: 1, expenses: 1 },
+  { month: 'Jul', income: 1, expenses: 1 },
 ];
 
 export default function IncomeVsExpenses({ data, isLoading = false }: IncomeVsExpensesProps) {
@@ -97,16 +97,22 @@ export default function IncomeVsExpenses({ data, isLoading = false }: IncomeVsEx
             />
             <Bar 
               dataKey="income" 
-              fill="url(#colorIncome)"
-              radius={[4, 4, 0, 0]}
               name="Income"
-            />
+              radius={[4, 4, 0, 0]}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-income-${index}`} fill={entry.income > 0 ? "#10b981" : "#ef4444"} />
+              ))}
+            </Bar>
             <Bar 
               dataKey="expenses" 
-              fill="url(#colorExpenses)"
-              radius={[4, 4, 0, 0]}
               name="Expenses"
-            />
+              radius={[4, 4, 0, 0]}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-expense-${index}`} fill={entry.expenses > 0 ? "#ef4444" : "#10b981"} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">

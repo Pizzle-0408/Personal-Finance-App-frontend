@@ -36,20 +36,15 @@ export default function CategoryPieChart({ breakdown, isLoading = false }: Categ
       .sort((a, b) => b.value - a.value);
   }, [breakdown]);
 
-  const total = useMemo(() => {
-    const actualTotal = data.reduce((sum, item) => sum + (item.isEmpty ? 0 : item.value), 0);
-    return actualTotal > 0 ? actualTotal : 1;
-  }, [data]);
+  const total = useMemo(() => data.reduce((sum, item) => sum + item.value, 0) || 1, [data]);
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
-      const actualValue = payload[0].payload.isEmpty ? 0 : payload[0].value;
-      const percent = total > 1 ? ((actualValue / total) * 100).toFixed(1) : '0.0';
       return (
         <div className="bg-card p-3 border border-border rounded-lg shadow-lg">
           <p className="text-sm text-foreground">{payload[0].name}</p>
           <p className="text-sm text-muted-foreground">
-            ${actualValue.toLocaleString()} ({percent}%)
+            ${payload[0].value.toLocaleString()} ({((payload[0].value / total) * 100).toFixed(1)}%)
           </p>
         </div>
       );
@@ -103,30 +98,27 @@ export default function CategoryPieChart({ breakdown, isLoading = false }: Categ
             </ResponsiveContainer>
           </div>
           <div className="flex flex-col justify-center space-y-2">
-            {data.map((entry, index) => {
-              const displayValue = entry.isEmpty ? 0 : entry.value;
-              return (
+            {data.map((entry, index) => (
+              <div 
+                key={entry.name} 
+                className="flex items-center space-x-2 cursor-pointer transition-opacity duration-300"
+                style={{ opacity: activeIndex === null || activeIndex === index ? 1 : 0.3 }}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+              >
                 <div 
-                  key={entry.name} 
-                  className="flex items-center space-x-2 cursor-pointer transition-opacity duration-300"
-                  style={{ opacity: activeIndex === null || activeIndex === index ? 1 : 0.3 }}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onMouseLeave={() => setActiveIndex(null)}
-                >
-                  <div 
-                    className="w-3 h-3 rounded-sm flex-shrink-0 transition-transform duration-300" 
-                    style={{ 
-                      backgroundColor: entry.color,
-                      transform: activeIndex === index ? 'scale(1.2)' : 'scale(1)'
-                    }}
-                  ></div>
-                  <div className="flex flex-col">
-                    <span className="text-xs text-foreground">{entry.name}</span>
-                    <span className="text-xs text-muted-foreground">${displayValue.toLocaleString()}</span>
-                  </div>
+                  className="w-3 h-3 rounded-sm flex-shrink-0 transition-transform duration-300" 
+                  style={{ 
+                    backgroundColor: entry.color,
+                    transform: activeIndex === index ? 'scale(1.2)' : 'scale(1)'
+                  }}
+                ></div>
+                <div className="flex flex-col">
+                  <span className="text-xs text-foreground">{entry.name}</span>
+                  <span className="text-xs text-muted-foreground">${entry.value.toLocaleString()}</span>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </CardContent>
