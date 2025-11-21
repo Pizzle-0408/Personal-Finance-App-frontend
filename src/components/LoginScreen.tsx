@@ -11,14 +11,19 @@ interface LoginScreenProps {
 }
 
 export default function LoginScreen({ onLogin, isDarkMode }: LoginScreenProps) {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login - in real app would validate credentials
-    if (username && password) {
+    // Hardcoded authentication
+    if (username === 'MyFinances12345' && password === 'AmrutaKudale') {
+      setError('');
       onLogin();
+    } else {
+      setError('Invalid username or password');
     }
   };
 
@@ -40,6 +45,9 @@ export default function LoginScreen({ onLogin, isDarkMode }: LoginScreenProps) {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
+              {error && (
+                <div className="text-red-600 text-sm text-center mb-2">{error}</div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
                 <div className="relative">
@@ -101,7 +109,7 @@ export default function LoginScreen({ onLogin, isDarkMode }: LoginScreenProps) {
         </Card>
 
         <p className="text-xs text-muted-foreground text-center mt-8">
-          Demo: Use any username and password to sign in
+          Demo: Username <span className="font-bold">MyFinances12345</span>, Password <span className="font-bold">AmrutaKudale</span>
         </p>
       </div>
     </div>

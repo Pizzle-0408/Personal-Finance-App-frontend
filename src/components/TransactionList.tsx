@@ -48,23 +48,6 @@ const categoryConfig = {
   Miscellaneous: { color: 'bg-gray-100 text-gray-600', icon: MoreHorizontal },
 };
 
-const sampleTransactions: Array<Transaction & { category: keyof typeof categoryConfig }> = [
-  { id: 1, name: 'Rent Payment', category: 'Housing', date: '2025-10-26', amount: 1850 },
-  { id: 2, name: 'Grocery Store', category: 'Food', date: '2025-10-25', amount: 156.42 },
-  { id: 3, name: 'Auto Insurance', category: 'Insurance', date: '2025-10-25', amount: 325 },
-  { id: 4, name: 'Gas Station', category: 'Transportation', date: '2025-10-24', amount: 45.8 },
-  { id: 5, name: 'Electric Bill', category: 'Utilities', date: '2025-10-23', amount: 125 },
-  { id: 6, name: 'Restaurant', category: 'Food', date: '2025-10-23', amount: 68.5 },
-  { id: 7, name: 'Gym Membership', category: 'Personal', date: '2025-10-22', amount: 59.99 },
-  { id: 8, name: 'Concert Tickets', category: 'Recreation and Entertainment', date: '2025-10-22', amount: 150 },
-  { id: 9, name: 'Doctor Visit Copay', category: 'Medical & Healthcare', date: '2025-10-21', amount: 35 },
-  { id: 10, name: 'Internet Bill', category: 'Utilities', date: '2025-10-20', amount: 89.99 },
-  { id: 11, name: 'Haircut', category: 'Personal', date: '2025-10-20', amount: 45 },
-  { id: 12, name: 'Uber Ride', category: 'Transportation', date: '2025-10-19', amount: 28.5 },
-  { id: 13, name: 'Streaming Services', category: 'Recreation and Entertainment', date: '2025-10-18', amount: 24.99 },
-  { id: 14, name: 'Coffee Shop', category: 'Food', date: '2025-10-18', amount: 12.8 },
-];
-
 interface TransactionListProps {
   transactions?: Transaction[];
   isLoading?: boolean;
@@ -72,7 +55,7 @@ interface TransactionListProps {
 
 export default function TransactionList({ transactions = [], isLoading = false }: TransactionListProps) {
   const usingLiveData = transactions.length > 0;
-  const data = usingLiveData ? transactions : sampleTransactions;
+  const data = usingLiveData ? transactions : [];
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);

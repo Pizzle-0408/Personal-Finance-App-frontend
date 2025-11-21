@@ -7,18 +7,29 @@ interface IncomeVsExpensesProps {
   isLoading?: boolean;
 }
 
-const fallbackData: IncomeVsExpensesPoint[] = [
-  { month: 'Apr', income: 6500, expenses: 4850 },
-  { month: 'May', income: 6500, expenses: 5120 },
-  { month: 'Jun', income: 6500, expenses: 4680 },
-  { month: 'Jul', income: 6500, expenses: 5340 },
-  { month: 'Aug', income: 6500, expenses: 4920 },
-  { month: 'Sep', income: 6500, expenses: 4956 },
-  { month: 'Oct', income: 6500, expenses: 5360 },
+const placeholderData: IncomeVsExpensesPoint[] = [
+  { month: 'Jan', income: 0, expenses: 0 },
+  { month: 'Feb', income: 0, expenses: 0 },
+  { month: 'Mar', income: 0, expenses: 0 },
+  { month: 'Apr', income: 0, expenses: 0 },
+  { month: 'May', income: 0, expenses: 0 },
+  { month: 'Jun', income: 0, expenses: 0 },
+  { month: 'Jul', income: 0, expenses: 0 },
 ];
 
 export default function IncomeVsExpenses({ data, isLoading = false }: IncomeVsExpensesProps) {
-  const chartData = data && data.length > 0 ? data : fallbackData;
+  const chartData = data && data.length > 0 ? data : placeholderData;
+
+  // Calculate average net income and savings rate from actual data
+  const avgNetIncome = chartData.length > 0
+    ? chartData.reduce((sum, point) => sum + (point.income - point.expenses), 0) / chartData.length
+    : 0;
+  
+  const avgIncome = chartData.length > 0
+    ? chartData.reduce((sum, point) => sum + point.income, 0) / chartData.length
+    : 0;
+  
+  const savingsRate = avgIncome > 0 ? (avgNetIncome / avgIncome) * 100 : 0;
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -101,11 +112,15 @@ export default function IncomeVsExpenses({ data, isLoading = false }: IncomeVsEx
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
           <div>
             <p className="text-sm text-muted-foreground">Average Net Income</p>
-            <p className="text-2xl text-green-600 dark:text-green-500">$1,301</p>
+            <p className="text-2xl text-green-600 dark:text-green-500">
+              ${Math.round(avgNetIncome).toLocaleString()}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Savings Rate</p>
-            <p className="text-2xl text-red-600 dark:text-red-500">20.0%</p>
+            <p className="text-2xl text-red-600 dark:text-red-500">
+              {savingsRate.toFixed(1)}%
+            </p>
           </div>
         </div>
       </CardContent>

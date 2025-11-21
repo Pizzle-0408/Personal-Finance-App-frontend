@@ -117,17 +117,15 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
     const source =
       monthlyAnalytics?.categoryBreakdown && monthlyAnalytics.categoryBreakdown.length > 0
         ? monthlyAnalytics.categoryBreakdown
-        : fallbackCategoryBreakdown;
+        : [];
 
     return source.map((item, index) => {
-      const fallback = fallbackCategoryBreakdown[index % fallbackCategoryBreakdown.length];
       return {
-        ...fallback,
         ...item,
-        color: item.color ?? fallback.color,
-        accentClass: item.accentClass ?? fallback.accentClass,
-        recommended: item.recommended ?? fallback.recommended,
-        recommendedAmount: item.recommendedAmount ?? fallback.recommendedAmount,
+        color: item.color ?? '#6b7280',
+        accentClass: item.accentClass ?? 'bg-gray-500',
+        recommended: item.recommended ?? 0,
+        recommendedAmount: item.recommendedAmount ?? 0,
       } as CategoryBreakdownEntry;
     });
   }, [monthlyAnalytics]);
@@ -162,11 +160,11 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
               </Button>
               <div className="flex items-center space-x-3">
                 <Avatar>
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>CB</AvatarFallback>
                 </Avatar>
                 <div className="hidden sm:block">
-                  <div className="text-sm text-foreground">John Doe</div>
-                  <div className="text-xs text-muted-foreground">john.doe@email.com</div>
+                  <div className="text-sm text-foreground">Carlos Bernal</div>
+                  <div className="text-xs text-muted-foreground">dexterthefirst112@gmail.com</div>
                 </div>
               </div>
               <Button variant="outline" size="sm" onClick={onLogout}>

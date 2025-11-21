@@ -7,22 +7,22 @@ interface MonthlyOverviewProps {
   isLoading?: boolean;
 }
 
-const fallbackSummary: MonthlySummary = {
-  totalSpending: 5360,
-  lastMonthTotal: 4956,
-  differenceAmount: 404,
-  differencePercent: 8.2,
-  dailyAverage: 198,
-  dailyAverageChange: -2.1,
+const emptySummary: MonthlySummary = {
+  totalSpending: 0,
+  lastMonthTotal: 0,
+  differenceAmount: 0,
+  differencePercent: 0,
+  dailyAverage: 0,
+  dailyAverageChange: 0,
   topCategory: {
-    name: 'Housing',
-    amount: 1850,
-    percent: 34.5,
+    name: 'N/A',
+    amount: 0,
+    percent: 0,
   },
 };
 
 export default function MonthlyOverview({ summary, isLoading = false }: MonthlyOverviewProps) {
-  const data = summary ?? fallbackSummary;
+  const data = summary ?? emptySummary;
   const differenceIsIncrease = data.differenceAmount >= 0;
   const differenceClass = differenceIsIncrease ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400';
   const dailyChangeClass = data.dailyAverageChange <= 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400';
