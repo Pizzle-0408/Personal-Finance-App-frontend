@@ -12,19 +12,8 @@ interface SpendingChartProps {
 export default function SpendingChart({ data, isLoading = false }: SpendingChartProps) {
   const [selectedOverlay, setSelectedOverlay] = useState('all');
   
-  const fallbackData: MonthlyTrendPoint[] = [
-    { month: 'Jan', total: 3200, housing: 1200, food: 600, transportation: 450, utilities: 250, insurance: 300, medical: 150, personal: 100, recreation: 100, education: 80, miscellaneous: 50 },
-    { month: 'Feb', total: 2900, housing: 1200, food: 550, transportation: 400, utilities: 200, insurance: 300, medical: 100, personal: 80, recreation: 50, education: 60, miscellaneous: 20 },
-    { month: 'Mar', total: 3500, housing: 1200, food: 700, transportation: 500, utilities: 300, insurance: 300, medical: 200, personal: 150, recreation: 100, education: 90, miscellaneous: 50 },
-    { month: 'Apr', total: 3100, housing: 1200, food: 600, transportation: 450, utilities: 250, insurance: 300, medical: 120, personal: 100, recreation: 60, education: 70, miscellaneous: 20 },
-    { month: 'May', total: 3400, housing: 1200, food: 650, transportation: 480, utilities: 280, insurance: 300, medical: 180, personal: 120, recreation: 140, education: 80, miscellaneous: 50 },
-    { month: 'Jun', total: 3600, housing: 1200, food: 700, transportation: 520, utilities: 300, insurance: 300, medical: 200, personal: 150, recreation: 180, education: 90, miscellaneous: 50 },
-    { month: 'Jul', total: 3300, housing: 1200, food: 620, transportation: 470, utilities: 260, insurance: 300, medical: 160, personal: 130, recreation: 120, education: 75, miscellaneous: 40 },
-  ];
-  
-  // Use fallback data instead of real data to keep the visual display
   const normalizedData = useMemo(() => {
-    const source = fallbackData;
+    const source = data && data.length > 0 ? data : [];
     return source.map((entry) => ({
       month: entry.month,
       total: entry.total,

@@ -280,7 +280,7 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
                       <div key={item.category}>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-3">
-                            <div className={`w-3 h-3 ${item.accentClass ?? 'bg-gray-500'} rounded-full`}></div>
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color ?? '#6b7280' }}></div>
                             <span className="text-sm text-muted-foreground">{item.category}</span>
                           </div>
                           <div className="flex items-center space-x-4">
@@ -294,8 +294,8 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
                         </div>
                         <div className="w-full bg-muted rounded-full h-2 relative">
                           <div
-                            className={`${item.accentClass ?? 'bg-gray-500'} h-2 rounded-full transition-all`}
-                            style={{ width: `${barPercent}%` }}
+                            className="h-2 rounded-full transition-all"
+                            style={{ width: `${barPercent}%`, backgroundColor: item.color ?? '#6b7280' }}
                           ></div>
                           {recommendedPercent > 0 && (
                             <div
