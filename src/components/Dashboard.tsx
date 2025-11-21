@@ -11,6 +11,7 @@ import CategoryPieChart from './CategoryPieChart';
 import MonthlyOverview from './MonthlyOverview';
 import IncomeVsExpenses from './IncomeVsExpenses';
 import NeedsVsWantsBarChart from './NeedsVsWantsBarChart';
+import ChatBot from './ChatBot';
 import { Bell, LogOut, Settings, Moon, Sun, Upload, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
 import {
@@ -240,6 +241,11 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
         <div className="grid gap-6 md:grid-cols-2">
           <CategoryPieChart breakdown={categoryBreakdownData} isLoading={isLoading} />
           <IncomeVsExpenses data={monthlyAnalytics?.incomeVsExpenses} isLoading={isLoading} />
+        </div>
+
+        {/* AI Chat Assistant */}
+        <div className="mt-8">
+          <ChatBot />
         </div>
 
         {/* Tabs for detailed views */}
