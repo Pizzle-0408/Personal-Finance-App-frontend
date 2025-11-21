@@ -10,6 +10,7 @@ import SpendingChart from './SpendingChart';
 import CategoryPieChart from './CategoryPieChart';
 import MonthlyOverview from './MonthlyOverview';
 import IncomeVsExpenses from './IncomeVsExpenses';
+import NeedsVsWantsBarChart from './NeedsVsWantsBarChart';
 import { Bell, LogOut, Settings, Moon, Sun, Upload, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
 import {
@@ -205,29 +206,22 @@ export default function Dashboard({ onLogout, isDarkMode, onToggleDarkMode }: Da
         {/* Monthly Overview */}
         <MonthlyOverview summary={monthlyAnalytics?.summary} isLoading={isLoading} />
 
-        {dailySnapshot.length > 0 && (
+        {/* Needs vs Wants Bar Chart */}
+        {monthlyAnalytics?.trend && (
           <div className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Daily Spending Snapshot</CardTitle>
-                <CardDescription>Last {dailySnapshot.length} days</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {dailySnapshot.map((entry) => (
-                    <div key={entry.date} className="flex items-center justify-between text-sm">
-                      <div className="text-muted-foreground">{formatDateLabel(entry.date)}</div>
-                      <div className="flex items-center gap-4 text-muted-foreground">
-                        {typeof entry.transactions === 'number' && <span>{entry.transactions} tx</span>}
-                        <span className="text-foreground font-medium">
-                          ${Number(entry.total ?? 0).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <NeedsVsWantsBarChart
+              data={(monthlyAnalytics?.trend ?? []).map((month) => {
+                // Define needs and wants categories based on monthly trend data
+                // Needs: housing, food (groceries), transportation, utilities, insurance, medical, personal, education
+                // Wants: dining (restaurants/food&drink), recreation (entertainment), shopping (gifts), miscellaneous
+                const needs = (month.housing ?? 0) + (month.food ?? 0) + (month.transportation ?? 0) + 
+                              (month.utilities ?? 0) + (month.insurance ?? 0) + (month.medical ?? 0) + 
+                              (month.personal ?? 0) + (month.education ?? 0);
+                const wants = (month.dining ?? 0) + (month.recreation ?? 0) + (month.shopping ?? 0) + (month.miscellaneous ?? 0);
+                return { month: month.month, needs, wants };
+              })}
+              isLoading={isLoading}
+            />
           </div>
         )}
 
